@@ -1,0 +1,40 @@
+# Configuration for using service account to talk to Google settings
+
+# Information to locate the credentials for this service account.  The
+# current implementation uses the Google default application processing.
+CREDENTIALS:
+    DIR: <json file directory>
+    FILE: <google json file>
+
+# Information common to every request we will make to this domain.
+DOMAIN:
+    SUBJECT_EMAIL: <admin user email>
+    GROUP_EMAIL_SUFFIX: <e.g. discussions-dev.its.umich.edu>
+    DEFAULT_NAME: <e.g. discussions-dev.its.umich.edu>
+    GROUP_EMAIL: <specific group email>
+    TEST_MEMBER_EMAILS:
+      - you@somewhere.edu
+
+# Settings specific to each API service we will be using.
+GROUP_SETTINGS:
+     SERVICE_NAME: Google::Apis::GroupssettingsV1::GroupssettingsService
+     APPLICATION_NAME: Groups Settings API Ruby Service Account
+     GROUP_EMAIL: <group email in domain>
+     SCOPES:
+        - https://www.googleapis.com/auth/apps.groups.settings
+
+ADMIN_DIRECTORY:
+     SERVICE_NAME: Google::Apis::AdminDirectoryV1::DirectoryService
+     APPLICATION_NAME: Admin directory API Ruby Service Account
+     SCOPES:
+        - https://www.googleapis.com/auth/admin.directory.group.readonly
+        - https://www.googleapis.com/auth/admin.directory.group
+        - https://www.googleapis.com/auth/admin.directory.group.member
+        - https://www.googleapis.com/auth/admin.directory.group.member.readonly
+
+GROUPS_MIGRATION:
+     SERVICE_NAME: Google::Apis::GroupsmigrationV1::GroupsMigrationService
+     APPLICATION_NAME: Groups Migration API Ruby Service Account
+     SCOPES:
+        - https://www.googleapis.com/auth/apps.groups.migration
+
