@@ -21,7 +21,7 @@
 ## - make it possible to turn on logging and set logging level from configuration file.
 ## - recommend to NOT use email as id, since it could change.
 
-require "ggb/version"
+#require_relative "ggb/version"
 
 require 'json'
 require 'yaml'
