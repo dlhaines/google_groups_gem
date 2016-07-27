@@ -1,0 +1,17 @@
+
+############
+# group_create <id> <name> <email> <description>    => create group if necessary
+# group_settings <id> <description> => (limited) update description
+# group_delete <id> <name> => get rid of this group
+# group_list
+
+# group_member_add <id> <member email> => add member to group
+# group_member_list <id> => get a list of the current members (include role)
+# group_member_delete <id> <member email>
+
+# group_migration_insert <id> <email file name> => insert standard email
+# email content as string format is message/rfc822
+## NOTE: currently has a dummy implementation.
+
+###########
+
