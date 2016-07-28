@@ -83,7 +83,8 @@ This is a test.
       if GGBDriverCSV.method_defined? command
         self.send(command, elements)
       else
-        puts ">>>>>>>>> not implemented: [#{command}] [#{args}]"
+        #puts ">>>>>>>>> not implemented: [#{command}] [#{args}]"
+        puts ">>>>>>>>> not implemented: [#{command}]"
       end
 
     end
@@ -121,6 +122,24 @@ This is a test.
 
     run_request(config, args[1])
   end
+
+  def group_info(args)
+
+    config = {
+        :args => args,
+        :required_args => 2,
+        :method_symbol => :get_group_info,
+        :handle_result => Proc.new { |result|
+          puts "group_info: for #{args[1]}"
+          puts "result.inspect: #{result.inspect}"
+          result
+        },
+        :service_name => 'ADMIN_DIRECTORY'
+    }
+
+    run_request(config, args[1])
+  end
+
 
   def group_list(args)
 
