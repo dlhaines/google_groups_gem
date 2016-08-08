@@ -7,6 +7,6 @@
 /pkg/
 /spec/reports/
 /tmp/
+.idea
 default.yml
-./.idea
 *.csv
