@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'ggb/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "GGB"
+  spec.name          = "ggb"
   spec.version       = GGB::VERSION
   spec.authors       = ["David Haines"]
   spec.email         = ["dlhaines@umich.edu"]
