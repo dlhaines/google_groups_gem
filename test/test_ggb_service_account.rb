@@ -378,7 +378,7 @@ This is a test.
             test_email = create_test_email group_id, "Dave Haines", "dlhaines@umich.edu"
             response_json = @s.insert_archive(group_id, test_email)
             response = JSON.parse(response_json)
-            assert_equal "SUCCESS", response['response_code'], "added new email"
+            assert_equal "SUCCESS", response['responseCode'], "added new email"
           end
 
           should "FAIL TO INSERT WHEN BAD GROUP" do
