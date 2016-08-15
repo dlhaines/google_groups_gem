@@ -1,8 +1,11 @@
 # ggb
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/GGB`. To experiment with that code, run `bin/console` for an interactive prompt.
+This gem provides a simple Ruby interface to the Google API calls to manage Google Groups. See the 
+test file for examples of how to use it.  See the file lib/ggb.rb for the actual implementation.
 
-TODO: Delete this and the text above, and describe your gem
+Only a limited number of methods, sufficient for the original project needs, have been surfaced and 
+tested.  However much API specific information has been abstracted to the yaml configuration file and
+the calls to the Google API are very short.  Adding additional method (and tests) should be straightforward.
 
 ## Installation
 
@@ -22,21 +25,30 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+The default.yml.TEMPLATE file should be copied to a .yml file and the path and file name to appropriate
+Google service account json credentials should be added.
+
+A test file is available (`bundle exec rake test`) but it is specific to the original project and may require changes as may the
+default.yml file.
+
+See the test file for examples of how to write code to use the gem.
+
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+These instructions assume you are using _bundler_.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. 
 
 To generate a gem for local testing run:
 
     bundle exec rake build
     
-Other projects can reference this gem build in the Gemfile file via the :path option
+Other projects can reference this gem via the path or git options.  E.g.
+ * `gem "ggb", :path => "<local checkout of>/google_groups_gem"`
+ * `gem 'ggb', :git => "https://github.com/tl-its-umich-edu/google_groups_gem.git", :tag => '<tag>'`
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/ggb.
+Bug reports and pull requests are welcome on GitHub for https://github.com/tl-its-umich-edu/google_groups_gem.
 
