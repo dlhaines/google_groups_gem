@@ -264,7 +264,7 @@ class GGBServiceAdminDirectoryTest < Minitest::Test
         # end
 
       end
-
+      
     end
 
   end
