@@ -1,8 +1,10 @@
 require 'minitest'
 require 'minitest/autorun'
-require 'minitest/unit'
+
 require 'shoulda'
 require_relative '../lib/ggb'
+
+require_relative 'test_helper'
 
 ## Test / demonstrate calling the UMich google group apis
 
@@ -11,114 +13,19 @@ require_relative '../lib/ggb'
 # always be there.  They are included because they may be useful for specific
 # situations.
 
-### TTD:
-# - factor out the domain and email.
-# - factor out constants
+class GGBServiceAdminDirectoryTest < Minitest::Test
 
-#### Standard values for testing
-# Used to construct safe group names for testing.
-SUFFIX="@discussions-dev.its.umich.edu"
-PREFIX="GGB-CPM-TEST-inserted-group-"
-# No group will ever have this name.
-NEVER_A_GROUP="GGB-CPM-bored_of_the_rings#{SUFFIX}"
-# This group will always exist.
-ETERNAL_GROUP="ggb-cpm-eternal@discussions-dev.its.umich.edu"
-EMAIL_INSERT_TEST_GROUP="ggb-test-group-insert@discussions-dev.its.umich.edu"
+  include TestHelper
 
-CONFIG_TEST_FILE = 'default.yml'
-
-# Some tests are useful, but not in automated setting.
-#RUN_EVERYTHING = true
-RUN_EVERYTHING = false
-
-class GGBServiceAccountTest < Minitest::Test
-
-  # utility to construct useful test group names
-  def create_group_name(root)
-    "#{PREFIX}#{root}#{SUFFIX}"
-  end
-
-  #From: "Alice Smith" <alice@example.com>
-  def create_test_email(group_id, from_name, from_email)
-    # Format an RFC822 message
-    now = Time.now
-    message_id = "#{now.to_f}-#{group_id}"
-    message_date = now.strftime '%a, %d %b %Y %T %z'
-    message = <<-EOF
-Message-ID: <#{message_id}>
-Date: #{message_date}
-To: #{group_id}
-From: "#{from_name}" <#{from_email}>
-Subject: Groups Migration API Test #{now.iso8601}
-
-This is a test.
-    EOF
-  end
+  # # utility to construct useful test group names
+  # def create_group_name(root)
+  #   "#{PREFIX}#{root}#{SUFFIX}"
+  # end
 
   context "TEST ENVIRONMENT" do
     should "have configuration file" do
       assert File.exist?(CONFIG_TEST_FILE), "should have readable configuration file: [#{CONFIG_TEST_FILE}]"
     end
-  end
-
-  ## Test our use of the group settings service.
-
-  context "SERVICE: GROUP SETTINGS:" do
-
-    setup do
-      @s = GGBServiceAccount.new()
-      @s.configure(CONFIG_TEST_FILE, 'GROUP_SETTINGS')
-    end
-
-    teardown do
-    end
-
-    context "CONFIGURATION" do
-
-      should "read default information and create a new service" do
-        gac = ENV['GOOGLE_APPLICATION_CREDENTIALS']
-        assert_match /\.json$/, gac, "google application credentials should be json file."
-        assert_operator gac.length, :>, 6, "path to credentials should be non-trivial."
-      end
-
-    end
-
-    context "READ" do
-      should "get settings for existing group" do
-        group_settings_json = @s.get_group_settings
-        group_settings = JSON.parse(group_settings_json)
-        refute_nil group_settings, "read existing group description"
-        # check for description in standard format.
-        assert_match /UPDATED description at:/, group_settings['description'], "Verify test group description"
-        # verify that email is plausible
-        assert_match /.*\@.*.umich.edu$/, group_settings['email'], "Verify email is plausible"
-      end
-
-    end
-
-    context "UPDATE" do
-
-      should "modify description" do
-        skip "implement later"
-        puts "update modify description"
-        initial_settings_json = @s.get_group_settings
-        puts "UPDATE modify description: #{initial_settings_json}"
-        initial_settings = JSON.parse(initial_settings_json)
-        refute_nil initial_settings, "modify existing group description"
-        #puts "modify description: initial_settings: #{initial_settings}"
-        initial_description = initial_settings['description']
-        sleep(1) # make sure time stamp in description should be different
-        # modify settings object to have new description
-        #initial_settings.description = "UPDATED description at: #{Time.now.iso8601}"
-        initial_settings['description'] = "UPDATED description at: #{Time.now.iso8601}"
-        update_result_json = @s.update_group_settings(initial_settings)
-        update_result = JSON.parse(update_result_json)
-        updated_description = update_result['description']
-        refute_equal initial_description, updated_description, "description should have changed"
-      end
-
-    end
-
   end
 
   ## Test our use of the admin directory service for groups.
@@ -339,10 +246,7 @@ This is a test.
           member = @eternal_member
           result_json = @s.get_member ETERNAL_GROUP, member
           result = JSON.parse(result_json)
-          #puts "members: get: #{result.inspect}"
-          #assert_match @eternal_member, result.email
           assert_match @eternal_member, result['email']
-          #fail "verify member get"
         end
 
         should "LIST all" do
@@ -360,49 +264,9 @@ This is a test.
         # end
 
       end
-      #end
 
-
-      ## test email archive migration
-      context "SERVICE: GROUPS MIGRATION:" do
-
-        setup do
-          @s = GGBServiceAccount.new()
-          @s.configure(CONFIG_TEST_FILE, 'GROUPS_MIGRATION')
-        end
-
-        context "INSERT:" do
-
-          should "ADD EMAIL" do
-            group_id = EMAIL_INSERT_TEST_GROUP
-            test_email = create_test_email group_id, "Dave Haines", "dlhaines@umich.edu"
-            response_json = @s.insert_archive(group_id, test_email)
-            response = JSON.parse(response_json)
-            assert_equal "SUCCESS", response['responseCode'], "added new email"
-          end
-
-          should "FAIL TO INSERT WHEN BAD GROUP" do
-            group_id = EMAIL_INSERT_TEST_GROUP+".XXX"
-            test_email = create_test_email group_id, "Dave Haines", "dlhaines@umich.edu"
-            begin
-              response = @s.insert_archive(group_id, test_email)
-            rescue => exp
-              response = nil
-            end
-            assert_nil response, "nonsense group id should not work"
-          end
-
-          # NOTE: bad user email will work fine
-
-        end
-
-        context "ATTACHMENTS:" do
-          should_eventually "handle attachments" do
-
-          end
-        end
-      end
     end
+
   end
 end
 
