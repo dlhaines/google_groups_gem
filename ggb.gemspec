@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'ggb/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "GGB"
+  spec.name          = "ggb"
   spec.version       = GGB::VERSION
   spec.authors       = ["David Haines"]
   spec.email         = ["dlhaines@umich.edu"]
@@ -28,6 +28,9 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "googleauth"
   spec.add_dependency 'google-api-client'
+  
+  spec.add_dependency 'jruby-openssl', '>= 0.9.17'
+  spec.add_dependency 'httpclient', '= 2.8.0'
 
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
