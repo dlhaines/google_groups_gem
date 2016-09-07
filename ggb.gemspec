@@ -29,13 +29,18 @@ Gem::Specification.new do |spec|
   spec.add_dependency "googleauth"
   spec.add_dependency 'google-api-client'
   
-  spec.add_dependency 'jruby-openssl', '>= 0.9.17'
-  spec.add_dependency 'httpclient', '= 2.8.0'
+  #spec.add_dependency 'jruby-openssl', '>= 0.9.17'
+  #spec.add_dependency 'httpclient', '= 2.8.0'
 
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
 
   spec.add_development_dependency 'minitest'
+  #spec.add_development_dependency 'minitest/autorun'
+ #  spec.add_development_dependency 'minitest/unit'
+ # spec.add_development_dependency 'minitest/reporters'
+  #require 'minitest/unit'
+  #require "minitest/reporters"
   spec.add_development_dependency 'activesupport', '4.2.5'
   spec.add_development_dependency 'shoulda'
 
