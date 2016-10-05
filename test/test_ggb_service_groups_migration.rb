@@ -71,15 +71,10 @@ This is a test.
         assert_nil response, "nonsense group id should not work"
       end
 
-      # NOTE: bad user email address will insert fine.
+      # NOTE: a bad user email address will insert just fine.
 
     end
 
-    context "ATTACHMENTS:" do
-      should_eventually "handle attachments" do
-
-      end
-    end
   end
 end
 

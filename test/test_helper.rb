@@ -14,7 +14,8 @@ PREFIX="GGB-CPM-TEST-inserted-group-"
 NEVER_A_GROUP="GGB-CPM-bored_of_the_rings#{SUFFIX}"
 # This group will always exist.
 ETERNAL_GROUP="ggb-cpm-eternal@discussions-dev.its.umich.edu"
-EMAIL_INSERT_TEST_GROUP="ggb-test-group-insert@discussions-dev.its.umich.edu"
+#EMAIL_INSERT_TEST_GROUP="ggb-test-group-insert@discussions-dev.its.umich.edu"
+EMAIL_INSERT_TEST_GROUP="ggb-test-group-20160615@discussions-dev.its.umich.edu"
 
 CONFIG_TEST_FILE = 'default.yml'
 

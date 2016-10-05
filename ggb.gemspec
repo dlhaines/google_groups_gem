@@ -11,7 +11,6 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Wrapper for Google Groups for Business'
   #spec.description   = %q{TODO: Write a longer description or delete this line.}
-  #spec.homepage      = "TODO: Put your gem's website or public repo URL here."
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
@@ -22,16 +21,11 @@ Gem::Specification.new do |spec|
   end
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  #spec.bindir        = "exe"
-  #spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.add_dependency "googleauth"
   spec.add_dependency 'google-api-client'
   
-  #spec.add_dependency 'jruby-openssl', '>= 0.9.17'
-  #spec.add_dependency 'httpclient', '= 2.8.0'
-
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
 
