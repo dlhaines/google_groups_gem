@@ -30,11 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
 
   spec.add_development_dependency 'minitest'
-  #spec.add_development_dependency 'minitest/autorun'
- #  spec.add_development_dependency 'minitest/unit'
- # spec.add_development_dependency 'minitest/reporters'
-  #require 'minitest/unit'
-  #require "minitest/reporters"
+
   spec.add_development_dependency 'activesupport', '4.2.5'
   spec.add_development_dependency 'shoulda'
 
