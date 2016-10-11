@@ -53,11 +53,9 @@ class GGBServiceAccount
     attr_writer :logger
 
     def logger
-      #puts "ggb: before set  @logger: #{@logger}"
       @logger ||= Logger.new($stdout).tap do |log|
         log.progname = self.name
       end
-      #puts "ggb: after set  @logger: #{@logger}"
       @logger
     end
   end
