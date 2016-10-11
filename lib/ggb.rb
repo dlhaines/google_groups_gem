@@ -48,16 +48,17 @@ end
 
 class GGBServiceAccount
 
-  # Add logger that can be overridden.  Sample call below.
-  #GGBServiceAccount.logger.debug "initalized"
-
+  # Add logger that can be overridden.
   class << self
     attr_writer :logger
 
     def logger
+      #puts "ggb: before set  @logger: #{@logger}"
       @logger ||= Logger.new($stdout).tap do |log|
         log.progname = self.name
       end
+      #puts "ggb: after set  @logger: #{@logger}"
+      @logger
     end
   end
 
@@ -73,7 +74,10 @@ class GGBServiceAccount
   def initialize
     @cf = Hash.new()
     super
-    self.class.logger.level=Logger::ERROR
+    #self.class.logger.level=Logger::ERROR
+    #self.class.logger.level=Logger::INFO
+    self.class.logger.level=Logger::DEBUG
+    #self.class.logger = nil
   end
 
   # Read yml configuration file.  Add credential location to env so can use Google code
@@ -124,33 +128,27 @@ class GGBServiceAccount
   # Google::Apis::GroupssettingsV1::Groupssettings representation.
   #module Google::Apis::GroupssettingsV1::Groups
   def update_group_settings(new_settings)
-    puts "initial new_settings: #{new_settings}"
     service = authorize_google_service
     begin
-      #puts "new new_settings: #{new_settings}"
-
+      self.class.logger.debug "update group settings: #{new_settings}"
       result = service.update_group @api_settings['GROUP_EMAIL'], new_settings
     rescue => exp
       msg = "update_group_settings: FAILED status_code: #{exp.status_code} message: #{exp.message} new_settings: #{new_settings}"
-      puts "update_group_settings: #{exp}"
-      self.class.logger.warn msg
-      new_exp = GGBServiceAccountError.new(msg, exp.status_code)
-      raise new_exp
+      handle_exception(exp, msg)
     end
     result ? result.to_json : nil
   end
 
   # Find the current settings
+  # partial implementation
   def get_group_settings
     service = authorize_google_service
     begin
+      self.class.logger.debug "get group settings: #{@api_settings['GROUP_EMAIL']}"
       result = service.get_group(@api_settings['GROUP_EMAIL'])
-        #puts "get_group_settings: #{result.to_json}"
     rescue => exp
       msg = "get_group_settings: FAILED status_code: #{exp.status_code} message: #{exp.message} key: #{@api_settings['GROUP_EMAIL']}"
-      self.class.logger.warn msg
-      new_exp = GGBServiceAccountError.new(msg, exp.status_code)
-      raise new_exp
+      handle_exception(exp, msg)
     end
     result ? result.to_json : nil
   end
@@ -164,9 +162,11 @@ class GGBServiceAccount
   def get_group_info(key)
     service = authorize_google_service
     begin
+      self.class.logger.debug "get_group_info: key: #{key}"
       result = service.get_group(key)
     rescue => exp
       msg = "get_group_info: FAILED status_code: #{exp.status_code} message: #{exp.message} key: #{key}"
+      self.class.logger.debug msg
       handle_exception(exp, msg)
     end
     result ? result.to_json : nil
@@ -183,6 +183,7 @@ class GGBServiceAccount
     g = Google::Apis::AdminDirectoryV1::Group.new(new_group_settings)
     service = authorize_google_service
     begin
+      self.class.logger.debug "insert new group: #{new_group_settings}"
       result = service.insert_group(g)
     rescue => exp
       msg = "insert_new_group: FAILED status_code: #{exp.status_code} message: #{exp.message} group_settings: #{new_group_settings.inspect}"
@@ -196,12 +197,12 @@ class GGBServiceAccount
   def delete_group group_id
     service = authorize_google_service
     begin
+      self.class.logger.debug "delete_group: #{group_id}"
       result = service.delete_group group_id
     rescue => exp
       msg = "delete_group: FAILED status_code: #{exp.status_code} message: #{exp.message} group_id: #{group_id}"
       handle_exception(exp, msg)
     end
-    # puts "delete_group : #{result}"
     result ? result.to_json : nil
   end
 
@@ -211,6 +212,7 @@ class GGBServiceAccount
     domain = @cf['DOMAIN']['DEFAULT_NAME'] if domain.nil?
     service = authorize_google_service
     begin
+      self.class.logger.debug "list_groups domain: #{domain}"
       result = service.list_groups(domain: domain)
     rescue => exp
       msg = "list_groups: FAILED status_code: #{exp.status_code} message: #{exp.message} domain: #{domain}"
@@ -241,6 +243,7 @@ class GGBServiceAccount
   def list_members group_key
     service = authorize_google_service
     begin
+      self.class.logger.debug "list_members group_key: #{group_key}"
       result = service.list_members group_key
     rescue => exp
       msg = "list_members: FAILED status_code: #{exp.status_code} message: #{exp.message} group_key: #{group_key}"
@@ -253,6 +256,7 @@ class GGBServiceAccount
   def get_member group_key, member_key
     service = authorize_google_service
     begin
+      self.class.logger.debug "get_member group_key: #{group_key} member_key: #{member_key}"
       result = service.get_member group_key, member_key
     rescue => exp
       msg = "get_member: FAILED status_code: #{exp.status_code} message: #{exp.message} group_key: [#{group_key}] member_key: [#{member_key}]"
@@ -266,9 +270,10 @@ class GGBServiceAccount
     service = authorize_google_service
     m = Google::Apis::AdminDirectoryV1::Member.new member_settings
     begin
+      self.class.logger.debug "insert_member group_key: #{group_key} member_settings #{member_settings}"
       result = service.insert_member group_key, m
     rescue => exp
-      msg = "list_member: FAILED status_code: #{exp.status_code} message: #{exp.message} group_key: #{group_key} member_settings: #{member_settings}"
+      msg = "insert_member: FAILED status_code: #{exp.status_code} message: #{exp.message} group_key: #{group_key} member_settings: #{member_settings}"
       handle_exception(exp, msg)
     end
     result ? result.to_json : nil
@@ -278,6 +283,7 @@ class GGBServiceAccount
   def delete_member group_key, member_key
     service = authorize_google_service
     begin
+      self.class.logger.debug "delete_member: group_key: #{group_key} member_key: #{member_key}"
       result = service.delete_member group_key, member_key
     rescue => exp
       msg = "delete_member: FAILED status_code: #{exp.status_code} message: #{exp.message} group_key: #{group_key} member_key: #{member_key}"
@@ -292,6 +298,7 @@ class GGBServiceAccount
 
     service = authorize_google_service
     begin
+      self.class.logger.debug "insert_archive: group_key: #{group_key}"
       result = service.insert_archive(group_key, upload_source: StringIO.new(source), content_type: message_type)
     rescue => exp
       msg = "insert_archive: FAILED status_code: #{exp.status_code} message: #{exp.message} group_key: #{group_key}"
