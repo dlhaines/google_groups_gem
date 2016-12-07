@@ -74,6 +74,9 @@ class GGBServiceAccount
     @cf = Hash.new()
     super
     self.class.logger.level=Logger::ERROR
+    #self.class.logger.level=Logger::INFO
+    #self.class.logger.level=Logger::DEBUG
+    #self.class.logger = nil
   end
 
   # Read yml configuration file.  Add credential location to env so can use Google code
